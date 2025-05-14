@@ -22,6 +22,5 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     Page<Item> findByPrecoDiarioBetween(Double precoMin, Double precoMax, Pageable pageable);
 
-    // List<Item> findByPrecoDiarioGreaterThanEqual(Double precoMinimo);//teste
 
 }
