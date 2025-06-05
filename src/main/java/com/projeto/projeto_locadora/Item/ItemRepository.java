@@ -1,4 +1,4 @@
-package com.projeto.projeto_locadora.Item;
+package com.projeto.projeto_locadora.item;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.projeto.projeto_locadora.Item.Status.ItemStatus;
-import com.projeto.projeto_locadora.Item.Status.TipoItem;
+import com.projeto.projeto_locadora.item.Status.ItemStatus;
+import com.projeto.projeto_locadora.item.Status.TipoItem;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
