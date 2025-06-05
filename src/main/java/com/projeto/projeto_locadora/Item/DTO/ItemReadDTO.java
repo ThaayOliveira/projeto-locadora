@@ -1,8 +1,8 @@
-package com.projeto.projeto_locadora.Item.DTO;
+package com.projeto.projeto_locadora.item.DTO;
 
-import com.projeto.projeto_locadora.Item.Item;
-import com.projeto.projeto_locadora.Item.Status.ItemStatus;
-import com.projeto.projeto_locadora.Item.Status.TipoItem;
+import com.projeto.projeto_locadora.item.Item;
+import com.projeto.projeto_locadora.item.Status.ItemStatus;
+import com.projeto.projeto_locadora.item.Status.TipoItem;
 
 public record ItemReadDTO(
         Long id,

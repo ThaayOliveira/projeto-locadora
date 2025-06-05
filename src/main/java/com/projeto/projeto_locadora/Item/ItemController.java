@@ -1,11 +1,12 @@
-package com.projeto.projeto_locadora.Item;
+package com.projeto.projeto_locadora.item;
 
-import com.projeto.projeto_locadora.Item.DTO.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import com.projeto.projeto_locadora.item.DTO.*;
 
 @RestController
 @RequestMapping("/itens")
@@ -37,7 +38,7 @@ public class ItemController {
         try {
             return itemService.criar(itemCreateDTO);
         } catch (RuntimeException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Dados inválidos");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -55,7 +56,7 @@ public class ItemController {
         try {
             itemService.excluir(id);
         } catch (RuntimeException exception) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Item não encontrado para exclusão");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
 }

@@ -1,13 +1,13 @@
-package com.projeto.projeto_locadora.Item;
-
-import com.projeto.projeto_locadora.Item.DTO.*;
-import com.projeto.projeto_locadora.Item.Status.ItemStatus;
+package com.projeto.projeto_locadora.item;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import com.projeto.projeto_locadora.item.DTO.*;
+import com.projeto.projeto_locadora.item.Status.ItemStatus;
 
 @Service
 public class ItemService {
