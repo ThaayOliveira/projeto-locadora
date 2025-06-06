@@ -8,5 +8,6 @@ public record ItemUpdateDTO(
         String genero,
         Double precoDiario,
         TipoItem tipo,
-        ItemStatus status
+        ItemStatus status,
+        String imagemUrl
     ) {}

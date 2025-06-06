@@ -9,8 +9,8 @@ import org.springframework.web.server.ResponseStatusException;
 import com.projeto.projeto_locadora.item.DTO.*;
 
 @RestController
-@RequestMapping("/itens")
-public class ItemController {
+@RequestMapping("/item")
+public class ItemController {   
 
     private final ItemService itemService;
 

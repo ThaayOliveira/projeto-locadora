@@ -36,6 +36,7 @@ public class ItemService {
         novoItem.setPrecoDiario(dto.precoDiario());
         novoItem.setTipo(dto.tipo());
         novoItem.setStatus(dto.status() != null ? dto.status() : ItemStatus.DISPONIVEL);
+        novoItem.setImagemUrl(dto.imagemUrl());
 
         Item salvo = itemRepository.save(novoItem);
         return ItemReadDTO.from(salvo);
@@ -65,6 +66,7 @@ public class ItemService {
                 item.getGenero(),
                 item.getPrecoDiario(),
                 item.getTipo(),
-                item.getStatus());
+                item.getStatus(),
+                item.getImagemUrl());
     }
 }
