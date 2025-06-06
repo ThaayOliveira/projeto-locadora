@@ -10,7 +10,8 @@ public record ItemCreateDTO(
     String genero,
     Double precoDiario,
     TipoItem tipo,
-    ItemStatus status
+    ItemStatus status,
+    String imagemUrl
 )
 {
     public static Item mapper(ItemCreateDTO dto) {
@@ -22,6 +23,7 @@ public record ItemCreateDTO(
             item.setTipo(dto.tipo());
             item.setPrecoDiario(dto.precoDiario());
             item.setStatus(dto.status());
+            item.setImagemUrl(dto.imagemUrl());
             return item;
     }
 }

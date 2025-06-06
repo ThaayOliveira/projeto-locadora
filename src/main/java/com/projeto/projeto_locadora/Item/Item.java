@@ -25,6 +25,7 @@ public class Item {
     TipoItem tipo;
     @Enumerated(EnumType.STRING)
     ItemStatus status;
+    String imagemUrl;
 
     // public Item(String titulo, String genero, Double precoDiario, TipoItem tipo) {
     //     this.titulo = titulo;
@@ -85,6 +86,13 @@ public class Item {
         this.status = status;
     }
 
+    public String getImagemUrl() {
+        return imagemUrl;
+    }
+
+    public void setImagemUrl(String imagemUrl) {
+        this.imagemUrl = imagemUrl;
+    }
 
 
 }

@@ -10,7 +10,8 @@ public record ItemReadDTO(
         String genero,
         Double precoDiario,
         TipoItem tipo,
-        ItemStatus status
+        ItemStatus status,
+        String imagemUrl
 ) {
 
     public static ItemReadDTO from(Item item) {
@@ -20,6 +21,8 @@ public record ItemReadDTO(
                 item.getGenero(),
                 item.getPrecoDiario(),
                 item.getTipo(),
-                item.getStatus());
+                item.getStatus(),
+                item.getImagemUrl()
+                );
     }
 }
