@@ -1,14 +1,15 @@
-package com.projeto.projeto_locadora.Cliente;
+package com.projeto.projeto_locadora.cliente;
 
-import com.projeto.projeto_locadora.Cliente.DTO.ClienteCreateDTO;
-import com.projeto.projeto_locadora.Cliente.DTO.ClienteReadDTO;
-import com.projeto.projeto_locadora.Cliente.DTO.ClienteUpdateDTO;
-import com.projeto.projeto_locadora.Cliente.Status.ClienteStatus;
-import com.projeto.projeto_locadora.Cliente.Status.TipoCliente;
-import com.projeto.projeto_locadora.Cliente.Cliente;
-import com.projeto.projeto_locadora.Cliente.ClienteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.projeto.projeto_locadora.cliente.DTO.ClienteCreateDTO;
+import com.projeto.projeto_locadora.cliente.DTO.ClienteReadDTO;
+import com.projeto.projeto_locadora.cliente.DTO.ClienteUpdateDTO;
+import com.projeto.projeto_locadora.cliente.Status.ClienteStatus;
+import com.projeto.projeto_locadora.cliente.Status.TipoCliente;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,122 +17,91 @@ import java.util.stream.Collectors;
 
 @Service
 public class ClienteService {
-    
-    @Autowired
-    private ClienteRepository clienteRepository;
-    
-    public List<ClienteReadDTO> listarTodos() {
-        return clienteRepository.findAll().stream()
-                .map(this::convertToReadDTO)
-                .collect(Collectors.toList());
+
+    private final ClienteRepository clienteRepository;
+
+    public ClienteService(ClienteRepository clienteRepository) {
+        this.clienteRepository = clienteRepository;
     }
-    
-    
-    public List<ClienteReadDTO> listarComFiltros(String nome, String email, 
-                                                TipoCliente tipo, ClienteStatus status) {
-        return new java.util.ArrayList<>(clienteRepository.findByFiltros(nome, email, tipo, status));
+
+    public Page<ClienteReadDTO> listarTodos(Pageable pageable) {
+        return clienteRepository.findAll(pageable)
+                .map(ClienteReadDTO::from);
     }
-    
+
     public Optional<ClienteReadDTO> buscarPorId(Long id) {
         return clienteRepository.findById(id)
-                .map(this::convertToReadDTO);
+                .map(ClienteReadDTO::from);
     }
-    
+
     public Optional<ClienteReadDTO> buscarPorEmail(String email) {
         return clienteRepository.findByEmail(email)
-                .map(this::convertToReadDTO);
+                .map(ClienteReadDTO::from);
     }
-    
-    
+
     public Optional<ClienteReadDTO> buscarPorDocumento(String documento) {
         return clienteRepository.findByDocumento(documento)
-            .map(this::convertToReadDTO);
+                .map(ClienteReadDTO::from);
     }
-    
-    public ClienteReadDTO criarCliente(ClienteCreateDTO clienteCreateDTO) {
-        if (clienteRepository.existsByEmail(clienteCreateDTO.getEmail())) {
-            throw new RuntimeException("Cliente com este email já existe");
+
+    public ClienteReadDTO criarCliente(ClienteCreateDTO dto) {
+
+        Cliente cliente = ClienteCreateDTO.mapper(dto);
+        if (cliente.getStatus() == null) {
+            cliente.setStatus(ClienteStatus.ATIVO);
         }
-        
-        if (clienteRepository.existsByDocumento(clienteCreateDTO.getDocumento())) {
-            throw new RuntimeException("Cliente com este documento já existe");
-        }
-        
-        Cliente cliente = convertToEntityFromCreate(clienteCreateDTO);
-        Cliente clienteSalvo = clienteRepository.save(cliente);
-        return convertToReadDTO(clienteSalvo);
+
+        Cliente salvo = clienteRepository.save(cliente);
+        return ClienteReadDTO.from(salvo);
     }
-    
-    public Optional<ClienteReadDTO> atualizarCliente(Long id, ClienteUpdateDTO clienteUpdateDTO) {
-        return clienteRepository.findById(id)
-                .map(cliente -> {
-                    // Verificar se email já existe em outro cliente
-                    if (!cliente.getEmail().equals(clienteUpdateDTO.getEmail()) && 
-                        clienteRepository.existsByEmail(clienteUpdateDTO.getEmail())) {
-                        throw new RuntimeException("Email já está em uso por outro cliente");
-                    }
-                    
-                    // Verificar se documento já existe em outro cliente
-                    if (!cliente.getDocumento().equals(clienteUpdateDTO.getDocumento()) && 
-                        clienteRepository.existsByDocumento(clienteUpdateDTO.getDocumento())) {
-                        throw new RuntimeException("Documento já está em uso por outro cliente");
-                    }
-                    
-                    cliente.setNome(clienteUpdateDTO.getNome());
-                    cliente.setEmail(clienteUpdateDTO.getEmail());
-                    cliente.setTelefone(clienteUpdateDTO.getTelefone());
-                    cliente.setDocumento(clienteUpdateDTO.getDocumento());
-                    cliente.setEndereco(clienteUpdateDTO.getEndereco());
-                    cliente.setTipo(clienteUpdateDTO.getTipo());
-                    cliente.setStatus(clienteUpdateDTO.getStatus());
-                    
-                    Cliente clienteAtualizado = clienteRepository.save(cliente);
-                    return convertToReadDTO(clienteAtualizado);
-                });
+
+    public Optional<ClienteReadDTO> atualizarCliente(Long id, ClienteUpdateDTO dto) {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (dto.nome() != null)
+            cliente.setNome(dto.nome());
+        if (dto.email() != null)
+            cliente.setEmail(dto.email());
+        if (dto.telefone() != null)
+            cliente.setTelefone(dto.telefone());
+        if (dto.cpf() != null)
+            cliente.setCpf(dto.cpf());
+        if (dto.documento() != null)
+            cliente.setDocumento(dto.documento());
+        if (dto.endereco() != null)
+            cliente.setEndereco(dto.endereco());
+        if (dto.tipo() != null)
+            cliente.setTipo(dto.tipo());
+        if (dto.status() != null)
+            cliente.setStatus(dto.status());
+
+        Cliente atualizado = clienteRepository.save(cliente);
+        return Optional.of(ClienteReadDTO.from(atualizado));
     }
-    
+
     public boolean deletarCliente(Long id) {
-        if (clienteRepository.existsById(id)) {
-            clienteRepository.deleteById(id);
-            return true;
+        if (!clienteRepository.existsById(id)) {
+            return false;
         }
-        return false;
+        clienteRepository.deleteById(id);
+        return true;
     }
-    
+
     public List<ClienteReadDTO> listarPorStatus(ClienteStatus status) {
         return clienteRepository.findByStatus(status).stream()
-                .map(this::convertToReadDTO)
+                .map(ClienteReadDTO::from)
                 .collect(Collectors.toList());
     }
-    
+
     public List<ClienteReadDTO> listarPorTipo(TipoCliente tipo) {
         return clienteRepository.findByTipo(tipo).stream()
-                .map(this::convertToReadDTO)
+                .map(ClienteReadDTO::from)
                 .collect(Collectors.toList());
     }
-    
-    private ClienteReadDTO convertToReadDTO(Cliente cliente) {
-        return new ClienteReadDTO(
-                cliente.getId(),
-                cliente.getNome(),
-                cliente.getEmail(),
-                cliente.getTelefone(),
-                cliente.getDocumento(),
-                cliente.getEndereco(),
-                cliente.getTipo(),
-                cliente.getStatus()
-        );
-    }
-    
-    private Cliente convertToEntityFromCreate(ClienteCreateDTO dto) {
-        Cliente cliente = new Cliente();
-        cliente.setNome(dto.getNome());
-        cliente.setEmail(dto.getEmail());
-        cliente.setTelefone(dto.getTelefone());
-        cliente.setDocumento(dto.getDocumento());
-        cliente.setEndereco(dto.getEndereco());
-        cliente.setTipo(dto.getTipo());
-        cliente.setStatus(dto.getStatus() != null ? dto.getStatus() : ClienteStatus.ATIVO);
-        return cliente;
+
+    public Page<ClienteReadDTO> listarComFiltros(String nome, String email, TipoCliente tipo, ClienteStatus status, Pageable pageable) {
+        return clienteRepository.findAll(pageable)
+            .map(ClienteReadDTO::from);
     }
 }

@@ -22,9 +22,10 @@ public class FilmesRepository {
             List<Item> itens = List.of(
                 criarItem("Star Wars - A vingança dos Sith", "Ficção Científica", 6.50, TipoItem.DVD, "star-wars.webp"),
                 criarItem("Jogos Vorazes", "Ação", 5.00, TipoItem.BLU_RAY, "jogos-vorazes.webp"),
+                criarItem("Clair Obscur: Expedition 33", "RPG", 4.90, TipoItem.JOGO, "clair-obscur.webp"),
+                criarItem("John Wick 2", "Ação", 6.00, TipoItem.DVD, "john-wick.webp"),
                 criarItem("A Viagem de Chihiro", "Animação", 4.50, TipoItem.DVD, "a-viagem-de-chihiro.webp"),
                 criarItem("Outlast", "Terror", 4.90, TipoItem.JOGO, "outlast.webp"),
-                criarItem("John Wick 2", "Ação", 6.00, TipoItem.DVD, "john-wick.webp"),
                 criarItem("Spider-Man 2", "Aventura", 5.50, TipoItem.BLU_RAY, "spider-man.webp"),
                 criarItem("O Rei Leão", "Animação", 4.00, TipoItem.DVD, "rei-leao.webp"),
                 criarItem("Willy's Wonderland", "Terror", 4.90, TipoItem.BLU_RAY, "willy-wonderland.webp")

@@ -1,7 +1,9 @@
-package com.projeto.projeto_locadora.Cliente;
+package com.projeto.projeto_locadora.cliente;
 
-import com.projeto.projeto_locadora.Cliente.Status.ClienteStatus;
-import com.projeto.projeto_locadora.Cliente.Status.TipoCliente;
+
+import com.projeto.projeto_locadora.cliente.Status.ClienteStatus;
+
+import com.projeto.projeto_locadora.cliente.Status.TipoCliente;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -21,6 +23,7 @@ public class Cliente {
     String nome;
     String email;
     String telefone;
+    String cpf;
     String documento;
     String endereco;
     @Enumerated(EnumType.STRING)
@@ -61,6 +64,14 @@ public class Cliente {
     
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
     
     public String getDocumento() {

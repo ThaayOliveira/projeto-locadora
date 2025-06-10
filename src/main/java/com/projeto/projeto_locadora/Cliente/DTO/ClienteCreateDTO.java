@@ -1,84 +1,32 @@
-package com.projeto.projeto_locadora.Cliente.DTO;
+package com.projeto.projeto_locadora.cliente.DTO;
 
-import com.projeto.projeto_locadora.Cliente.Status.ClienteStatus;
-import com.projeto.projeto_locadora.Cliente.Status.TipoCliente;
+import com.projeto.projeto_locadora.cliente.Cliente;
+import com.projeto.projeto_locadora.cliente.Status.ClienteStatus;
+import com.projeto.projeto_locadora.cliente.Status.TipoCliente;
 
-public class ClienteCreateDTO {
-    private String nome;
-    private String email;
-    private String telefone;
-    private String documento;
-    private String endereco;
-    private TipoCliente tipo;
-    private ClienteStatus status;
+public record ClienteCreateDTO (
+    String nome,
+    String email,
+    String telefone,
+    String cpf,
+    String documento,
+    String endereco,
+    TipoCliente tipo,
+    ClienteStatus status
+){
     
-    public ClienteCreateDTO() {
+    public static Cliente mapper(ClienteCreateDTO dto) {
+        Cliente cliente = new Cliente();
+
+        cliente.setNome(dto.nome());
+        cliente.setEmail(dto.email());
+        cliente.setTelefone(dto.telefone());
+        cliente.setCpf(dto.cpf());
+        cliente.setDocumento(dto.documento());
+        cliente.setEndereco(dto.endereco());
+        cliente.setTipo(dto.tipo());
+        cliente.setStatus(dto.status());
+        return cliente;
     }
     
-    public ClienteCreateDTO(String nome, String email, String telefone, 
-                           String documento, String endereco, TipoCliente tipo, ClienteStatus status) {
-        this.nome = nome;
-        this.email = email;
-        this.telefone = telefone;
-        this.documento = documento;
-        this.endereco = endereco;
-        this.tipo = tipo;
-        this.status = status;
-    }
-    
-    public String getNome() {
-        return nome;
-    }
-    
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-    
-    public String getEmail() {
-        return email;
-    }
-    
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    
-    public String getTelefone() {
-        return telefone;
-    }
-    
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-    
-    public String getDocumento() {
-        return documento;
-    }
-    
-    public void setDocumento(String documento) {
-        this.documento = documento;
-    }
-    
-    public String getEndereco() {
-        return endereco;
-    }
-    
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
-    
-    public TipoCliente getTipo() {
-        return tipo;
-    }
-    
-    public void setTipo(TipoCliente tipo) {
-        this.tipo = tipo;
-    }
-    
-    public ClienteStatus getStatus() {
-        return status;
-    }
-    
-    public void setStatus(ClienteStatus status) {
-        this.status = status;
-    }
 }

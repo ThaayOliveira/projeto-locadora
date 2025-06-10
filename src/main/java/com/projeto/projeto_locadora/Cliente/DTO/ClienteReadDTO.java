@@ -1,94 +1,33 @@
-package com.projeto.projeto_locadora.Cliente.DTO;
+package com.projeto.projeto_locadora.cliente.DTO;
 
-import com.projeto.projeto_locadora.Cliente.Status.ClienteStatus;
-import com.projeto.projeto_locadora.Cliente.Status.TipoCliente;
+import com.projeto.projeto_locadora.cliente.Cliente;
+import com.projeto.projeto_locadora.cliente.Status.ClienteStatus;
+import com.projeto.projeto_locadora.cliente.Status.TipoCliente;
 
-public class ClienteReadDTO {
-    private Long id;
-    private String nome;
-    private String email;
-    private String telefone;
-    private String documento;
-    private String endereco;
-    private TipoCliente tipo;
-    private ClienteStatus status;
+public record ClienteReadDTO (
+    Long id,
+    String nome,
+    String email,
+    String telefone,
+    String cpf,
+    String documento,
+    String endereco,
+    TipoCliente tipo,
+    ClienteStatus status
+){
     
-    public ClienteReadDTO() {
-    }
-    
-    public ClienteReadDTO(Long id, String nome, String email, String telefone, 
-                         String documento, String endereco, TipoCliente tipo, ClienteStatus status) {
-        this.id = id;
-        this.nome = nome;
-        this.email = email;
-        this.telefone = telefone;
-        this.documento = documento;
-        this.endereco = endereco;
-        this.tipo = tipo;
-        this.status = status;
-    }
-    
-    public Long getId() {
-        return id;
-    }
-    
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
-    public String getNome() {
-        return nome;
-    }
-    
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-    
-    public String getEmail() {
-        return email;
-    }
-    
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    
-    public String getTelefone() {
-        return telefone;
-    }
-    
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-    
-    public String getDocumento() {
-        return documento;
-    }
-    
-    public void setDocumento(String documento) {
-        this.documento = documento;
-    }
-    
-    public String getEndereco() {
-        return endereco;
-    }
-    
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
-    
-    public TipoCliente getTipo() {
-        return tipo;
-    }
-    
-    public void setTipo(TipoCliente tipo) {
-        this.tipo = tipo;
-    }
-    
-    public ClienteStatus getStatus() {
-        return status;
-    }
-    
-    public void setStatus(ClienteStatus status) {
-        this.status = status;
+   public static ClienteReadDTO from(Cliente cliente) {
+        return new ClienteReadDTO(
+            
+            cliente.getId(),
+            cliente.getNome(),
+            cliente.getEmail(),
+            cliente.getTelefone(),
+            cliente.getCpf(),
+            cliente.getDocumento(),
+            cliente.getEndereco(),
+            cliente.getTipo(),
+            cliente.getStatus());
+
     }
 }
