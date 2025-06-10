@@ -22,7 +22,6 @@ public record ItemReadDTO(
                 item.getPrecoDiario(),
                 item.getTipo(),
                 item.getStatus(),
-                item.getImagemUrl()
-                );
+                item.getImagemUrl());
     }
 }

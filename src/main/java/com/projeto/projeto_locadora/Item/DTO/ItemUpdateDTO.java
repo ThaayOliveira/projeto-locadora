@@ -10,4 +10,5 @@ public record ItemUpdateDTO(
         TipoItem tipo,
         ItemStatus status,
         String imagemUrl
-    ) {}
+) {
+}

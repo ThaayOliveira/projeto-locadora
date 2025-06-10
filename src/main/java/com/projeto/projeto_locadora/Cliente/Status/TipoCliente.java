@@ -1,4 +1,4 @@
-package com.projeto.projeto_locadora.Cliente.Status;
+package com.projeto.projeto_locadora.cliente.Status;
 
 public enum TipoCliente {
     PESSOA_FISICA,
