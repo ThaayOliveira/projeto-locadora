@@ -3,12 +3,8 @@ package com.projeto.projeto_locadora.ator;
 import jakarta.persistence.*;
 import java.util.Set;
 
-<<<<<<< HEAD
-import com.projeto.projeto_locadora.atorfilme.model.AtorFilme;
-=======
-import com.projeto.projeto_locadora.atorfilme.AtorFilme;
->>>>>>> d0e3253 (Salvar progresso antes de mudar para a branch locacao)
 
+import com.projeto.projeto_locadora.atorfilme.AtorFilme;
 
 @Entity
 @Table(name = "ator")
