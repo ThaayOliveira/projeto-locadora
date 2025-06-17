@@ -1,4 +1,4 @@
-package com.projeto.projeto_locadora.atorfilme.model;
+package com.projeto.projeto_locadora.atorfilme;
 
 import jakarta.persistence.*;
 import com.projeto.projeto_locadora.ator.Ator;

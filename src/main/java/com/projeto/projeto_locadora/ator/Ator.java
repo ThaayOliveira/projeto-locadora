@@ -3,7 +3,7 @@ package com.projeto.projeto_locadora.ator;
 import jakarta.persistence.*;
 import java.util.Set;
 
-import com.projeto.projeto_locadora.atorfilme.model.AtorFilme;
+import com.projeto.projeto_locadora.atorfilme.AtorFilme;
 
 
 @Entity
