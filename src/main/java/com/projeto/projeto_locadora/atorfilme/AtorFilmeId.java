@@ -1,4 +1,4 @@
-package com.projeto.projeto_locadora.atorfilme.model;
+package com.projeto.projeto_locadora.atorfilme;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
