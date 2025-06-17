@@ -3,8 +3,8 @@ package com.projeto.projeto_locadora.ator;
 import jakarta.persistence.*;
 import java.util.Set;
 
-import com.projeto.projeto_locadora.atorfilme.AtorFilme;
 
+import com.projeto.projeto_locadora.atorfilme.AtorFilme;
 
 @Entity
 @Table(name = "ator")

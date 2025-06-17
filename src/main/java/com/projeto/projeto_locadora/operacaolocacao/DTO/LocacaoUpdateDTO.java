@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public record LocacaoUpdateDTO(
 
-    Long numId,
+    Long id,
     LocalDateTime data,
     Double valorTotal
 

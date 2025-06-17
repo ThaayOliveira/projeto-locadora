@@ -9,20 +9,25 @@ import jakarta.persistence.OneToMany;
 
 public class Locacao {
 
-    Long numId;
+    Long id;
     LocalDateTime data;
     Double valorTotal;
+
+    LocalDateTime dataPrevistaDevolucao;
+    LocalDateTime dataDevolucao;
+    Double valorBase;
 
     @OneToMany
     @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente cliente;
 
-    public Long getnumId(){
-        return numId;
+
+    public Long getId(){
+        return id;
     }
 
-    public void setnumId(long numId){
-        this.numId = numId;
+    public void setId( Long id){
+        this.id = id;
     }
 
     public LocalDateTime getdata(){
@@ -40,5 +45,26 @@ public class Locacao {
     public void setvalorTotal(Double valorTotal){
         this.valorTotal = valorTotal;
     }
+
+    public Double getvalorBase() {
+        return valorBase;
+    }
+
+    public void setvalorBase(Double valorBase) {
+        this.valorBase = valorBase;
+    }
+
+    public LocalDateTime getdataPrevistaDevolucao() {
+        return dataPrevistaDevolucao;
+    }
+
+    public void setdataPrevistaDevolucao(LocalDateTime dataPrevistaDevolucao) {
+        this.dataPrevistaDevolucao = dataPrevistaDevolucao;
+    }
+
+    public LocalDateTime getdataDevolucao() {
+        return dataDevolucao;
+    }
+
 
 }

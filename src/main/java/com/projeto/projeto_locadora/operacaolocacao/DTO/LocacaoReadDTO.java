@@ -6,7 +6,7 @@ import com.projeto.projeto_locadora.operacaolocacao.Locacao;
 
 public record LocacaoReadDTO(
 
-    Long numId,
+    Long id,
     LocalDateTime data,
     Double valorTotal
     
@@ -15,7 +15,7 @@ public record LocacaoReadDTO(
     public static LocacaoReadDTO from(Locacao locacao) {
         return new LocacaoReadDTO(
 
-        locacao.getnumId(),
+        locacao.getId(),
         locacao.getdata(),
         locacao.getvalorTotal()
         
