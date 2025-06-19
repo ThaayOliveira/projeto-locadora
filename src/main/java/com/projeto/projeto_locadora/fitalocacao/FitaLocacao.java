@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import com.projeto.projeto_locadora.filmelocal.FilmesLocal;
 import com.projeto.projeto_locadora.fita.Fita;
+import com.projeto.projeto_locadora.operacaolocacao.Locacao;
 
 @Entity
 @Table(name = "fita_locacao")
@@ -18,6 +19,14 @@ public class FitaLocacao {
 
     @Column(name = "valor_fita")
     private Double valorFita;
+
+    @Column(name = "cod_locacao", length = 50)
+    private String codLocacao;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_locacao")
+    private Locacao locacao;
+    
 
     @ManyToOne
     @JoinColumn(name = "cod_fita", insertable = false, updatable = false)

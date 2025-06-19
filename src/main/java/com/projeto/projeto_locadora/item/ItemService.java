@@ -19,14 +19,13 @@ public class ItemService {
     }
 
     public Page<ItemReadDTO> listarTodos(Pageable pageable) {
-        return itemRepository.findAll(pageable)
-                .map(this::convertToItemReadDTO);
+        return itemRepository.findAll(pageable).map(ItemReadDTO::from);
     }
 
     public ItemReadDTO buscarPorId(Long id) {
         return itemRepository.findById(id)
-                .map(this::convertToItemReadDTO)
-                .orElseThrow(() -> new RuntimeException("Item não encontrado" + id));
+                .map(ItemReadDTO::from)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     public ItemReadDTO criar(ItemCreateDTO dto) {
@@ -38,35 +37,23 @@ public class ItemService {
         novoItem.setStatus(dto.status() != null ? dto.status() : ItemStatus.DISPONIVEL);
         novoItem.setImagemUrl(dto.imagemUrl());
 
-        Item salvo = itemRepository.save(novoItem);
-        return ItemReadDTO.from(salvo);
+        return ItemReadDTO.from(itemRepository.save(novoItem));
     }
 
     public ItemReadDTO atualizar(Long id, ItemUpdateDTO dto) {
         Item item = itemRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
         if (dto.titulo() != null) item.setTitulo(dto.titulo());
         if (dto.status() != null) item.setStatus(dto.status());
-    
-        return convertToItemReadDTO(itemRepository.save(item));
+
+        return ItemReadDTO.from(itemRepository.save(item));
     }
 
     public void excluir(Long id) {
         if (!itemRepository.existsById(id)) {
-            throw new RuntimeException("");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         itemRepository.deleteById(id);
-    }
-
-    private ItemReadDTO convertToItemReadDTO(Item item) {
-        return new ItemReadDTO(
-                item.getId(),
-                item.getTitulo(),
-                item.getGenero(),
-                item.getPrecoDiario(),
-                item.getTipo(),
-                item.getStatus(),
-                item.getImagemUrl());
     }
 }

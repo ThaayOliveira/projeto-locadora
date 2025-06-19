@@ -4,11 +4,14 @@ import java.time.LocalDateTime;
 
 import com.projeto.projeto_locadora.operacaolocacao.Locacao;
 
+
 public record LocacaoReadDTO(
 
     Long id,
     LocalDateTime data,
-    Double valorTotal
+    Double valorTotal,
+    LocalDateTime dataPrevistaDevolucao,
+    LocalDateTime dataDevolucao
     
 ) {
     
@@ -16,8 +19,10 @@ public record LocacaoReadDTO(
         return new LocacaoReadDTO(
 
         locacao.getId(),
-        locacao.getdata(),
-        locacao.getvalorTotal()
+        locacao.getData(),
+        locacao.getValorTotal(),
+        locacao.getDataPrevistaDevolucao(),
+        locacao.getDataDevolucao()
         
         );
 
