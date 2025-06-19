@@ -1,5 +1,6 @@
 package com.projeto.projeto_locadora.operacaolocacao;
 
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import org.springframework.data.domain.Page;
@@ -10,7 +11,9 @@ import com.projeto.projeto_locadora.operacaolocacao.DTO.*;
 
 @Service
 public class LocacaoService {
+
     private final LocacaoRepository locacaoRepository;
+    private static final double VALOR_MULTA_DIARIA = 3.5;
 
     public LocacaoService(LocacaoRepository locacaoRepository) {
         this.locacaoRepository = locacaoRepository;
@@ -18,53 +21,104 @@ public class LocacaoService {
 
     public Page<LocacaoReadDTO> listarTodos(Pageable pageable) {
         return locacaoRepository.findAll(pageable)
-                .map(this::convertToLocacaoReadDTO);
+                .map(LocacaoReadDTO::from);
     }
+
+    public Page<LocacaoReadDTO> listarLocacoesAtivas(Pageable pageable) {
+        return locacaoRepository.findByDataDevolucaoIsNull(pageable)
+                .map(LocacaoReadDTO::from);
+    }
+
+    public Page<LocacaoReadDTO> listarLocacoesAtrasadas(Pageable pageable) {
+    return locacaoRepository.findByLocacoesAtrasadas(LocalDateTime.now(), pageable)
+            .map(LocacaoReadDTO::from);
+}
+
 
     public LocacaoReadDTO findById(Long id) {
-        return locacaoRepository.findById(id)
-                .map(this::convertToLocacaoReadDTO)
-                .orElseThrow(() -> new RuntimeException());
+        return LocacaoReadDTO.from(buscarOuFalhar(id));
     }
 
-    public double calcularTotalComMulta(Long id) {
-    Locacao locacao = buscarPorId(id); // Assumindo que esse método já existe
+    public double calcularValorTotal(Long id) {
+        return calcularValorTotal(buscarOuFalhar(id));
+    }
 
-    double multa = 0.0;
+    public double calcularMultaPorAtraso(Long id) {
+        return calcularMulta(buscarOuFalhar(id));
+    }
 
-    if (locacao.getdataDevolucao() != null && locacao.getdataPrevistaDevolucao() != null) {
-        long diasAtraso = ChronoUnit.DAYS.between(
-            locacao.getdataPrevistaDevolucao().toLocalDate(),
-            locacao.getdataDevolucao().toLocalDate()
-        );
+    public LocacaoReadDTO registrarDevolucao(Long id) {
+        Locacao locacao = buscarOuFalhar(id);
 
-        if (diasAtraso > 0) {
-            multa = diasAtraso * 5.0; // R$5 por dia
+        if (locacao.getDataDevolucao() != null) {
+            throw new RuntimeException();
         }
 
-    }
-    double total = locacao.getvalorBase() + multa;
-    locacao.setvalorBase(total);
-    
-    return total;
+        locacao.setDataDevolucao(LocalDateTime.now());
+        locacao.setValorTotal(calcularValorTotal(locacao));
+
+        return LocacaoReadDTO.from(locacaoRepository.save(locacao));
     }
 
     public LocacaoReadDTO criar(LocacaoCreateDTO dto) {
-        Locacao novaLocacao = new Locacao();
-        novaLocacao.setCliente(dto.cliente());
-        novaLocacao.setItens(dto.itens());
-        novaLocacao.setValorTotal(dto.valorTotal());
-        novaLocacao.setDataLocacao(dto.dataLocacao());
-        novaLocacao.setDataDevolucao(dto.dataDevolucao());
+        Locacao locacao = LocacaoCreateDTO.mapper(dto);
+        if (locacao.getData() == null) {
+            locacao.setData(LocalDateTime.now());
+        }
 
-        Locacao salvo = LocacaoRepository.save(novoItem);
-        return LocacaoReadDTO.from(salvo);
+        return LocacaoReadDTO.from(locacaoRepository.save(locacao));
+    }
+
+    public void cancelarLocacao(Long id) {
+        Locacao locacao = buscarOuFalhar(id);
+
+        if (locacao.getDataDevolucao() != null) {
+            throw new RuntimeException("Locação já devolvida. Não pode ser cancelada.");
+        }
+
+        if (locacao.getData().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Locação já iniciada. Cancelamento não permitido.");
+        }
+
+        locacaoRepository.deleteById(id);
+    }
+
+    private Locacao buscarOuFalhar(Long id) {
+        return locacaoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException());
+    }
+
+    private double calcularValorTotal(Locacao locacao) {
+        double base = locacao.getValorBase() != null ? locacao.getValorBase() : 0.0;
+        return base + calcularMulta(locacao);
+    }
+
+    private double calcularMulta(Locacao locacao) {
+        if (locacao.getDataPrevistaDevolucao() == null)
+            return 0.0;
+
+        LocalDateTime devolucao = locacao.getDataDevolucao() != null
+                ? locacao.getDataDevolucao()
+                : LocalDateTime.now();
+
+        if (devolucao.isAfter(locacao.getDataPrevistaDevolucao())) {
+            long diasAtraso = ChronoUnit.DAYS.between(
+                    locacao.getDataPrevistaDevolucao().toLocalDate(),
+                    devolucao.toLocalDate());
+            return diasAtraso * VALOR_MULTA_DIARIA;
+        }
+
+        return 0.0;
     }
 
     public void excluir(Long id) {
-        if (!locacaoRepository.existsById(id)) {
-            throw new RuntimeException("");
+        Locacao locacao = buscarOuFalhar(id);
+
+        if (locacao.getDataDevolucao() != null) {
+            throw new RuntimeException();
         }
+
         locacaoRepository.deleteById(id);
     }
+
 }

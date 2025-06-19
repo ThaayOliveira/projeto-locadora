@@ -1,26 +1,44 @@
 package com.projeto.projeto_locadora.operacaolocacao;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.projeto.projeto_locadora.cliente.Cliente;
+import com.projeto.projeto_locadora.fitalocacao.FitaLocacao;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "locacao")
 public class Locacao {
 
-    Long id;
-    LocalDateTime data;
-    Double valorTotal;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private LocalDateTime data;
+    private Double valorTotal;
 
-    LocalDateTime dataPrevistaDevolucao;
-    LocalDateTime dataDevolucao;
-    Double valorBase;
+    private LocalDateTime dataPrevistaDevolucao;
+    private LocalDateTime dataDevolucao;
+    private Double valorBase;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente cliente;
 
+    @OneToMany(mappedBy = "locacao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<FitaLocacao> fitasLocacao;
+
+    public Locacao() {}
 
     public Long getId(){
         return id;
@@ -30,41 +48,60 @@ public class Locacao {
         this.id = id;
     }
 
-    public LocalDateTime getdata(){
+    public LocalDateTime getData(){
         return data;
     }
 
-    public void setdata(LocalDateTime data){
+    public void setData(LocalDateTime data){
         this.data = data;
     }
 
-    public Double getvalorTotal(){
+    public Double getValorTotal(){
         return valorTotal;
     }
 
-    public void setvalorTotal(Double valorTotal){
+    public void setValorTotal(Double valorTotal){
         this.valorTotal = valorTotal;
     }
 
-    public Double getvalorBase() {
+    public Double getValorBase() {
         return valorBase;
     }
 
-    public void setvalorBase(Double valorBase) {
+    public void setValorBase(Double valorBase) {
         this.valorBase = valorBase;
     }
 
-    public LocalDateTime getdataPrevistaDevolucao() {
+    public LocalDateTime getDataPrevistaDevolucao() {
         return dataPrevistaDevolucao;
     }
 
-    public void setdataPrevistaDevolucao(LocalDateTime dataPrevistaDevolucao) {
+    public void setDataPrevistaDevolucao(LocalDateTime dataPrevistaDevolucao) {
         this.dataPrevistaDevolucao = dataPrevistaDevolucao;
     }
 
-    public LocalDateTime getdataDevolucao() {
+    public LocalDateTime getDataDevolucao() {
         return dataDevolucao;
     }
 
+    public void setDataDevolucao(LocalDateTime dataDevolucao) {
+        this.dataDevolucao = dataDevolucao;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public List<FitaLocacao> getFitasLocacao() {
+        return fitasLocacao;
+    }
+
+    public void setFitasLocacao(List<FitaLocacao> fitasLocacao) {
+        this.fitasLocacao = fitasLocacao;
+    }
 
 }

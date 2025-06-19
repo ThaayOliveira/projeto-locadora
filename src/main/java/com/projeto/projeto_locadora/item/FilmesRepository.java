@@ -27,8 +27,8 @@ public class FilmesRepository {
                 criarItem("A Viagem de Chihiro", "Animação", 4.50, TipoItem.DVD, "a-viagem-de-chihiro.webp"),
                 criarItem("Outlast", "Terror", 4.90, TipoItem.JOGO, "outlast.webp"),
                 criarItem("Spider-Man 2", "Aventura", 5.50, TipoItem.BLU_RAY, "spider-man.webp"),
-                criarItem("O Rei Leão", "Animação", 4.00, TipoItem.DVD, "rei-leao.webp"),
-                criarItem("Willy's Wonderland", "Terror", 4.90, TipoItem.BLU_RAY, "willy-wonderland.webp")
+                criarItem("O Rei Leão", "Animação", 4.00, TipoItem.DVD, "rei-leao.webp")
+                // criarItem("Willy's Wonderland", "Terror", 4.90, TipoItem.BLU_RAY, "willy-wonderland.webp")
             );
 
             itemRepository.saveAll(itens);
